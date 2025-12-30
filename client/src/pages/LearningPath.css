@@ -1,0 +1,247 @@
+.learning-path-page {
+  width: 100%;
+}
+
+.learning-path-header {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.learning-path-header h1 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.path-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.path-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.progress-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.progress-value {
+  color: #333;
+  font-weight: 600;
+}
+
+.progress-bar-container {
+  flex: 1;
+  height: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s;
+}
+
+.progress-percentage {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-width: 50px;
+}
+
+.learning-path-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.topics-list h2,
+.roadmap-visualization h2 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.topic-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.topic-card.selected {
+  border-color: #667eea;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.topic-card.completed {
+  background: #f1f8e9;
+  border-color: #8bc34a;
+}
+
+.topic-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.topic-checkbox input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.topic-info {
+  flex: 1;
+}
+
+.topic-info h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.topic-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.topic-hours {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.topic-description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.topic-resources {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.topic-resources strong {
+  color: #333;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.topic-resources ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.topic-resources li {
+  margin-bottom: 0.5rem;
+}
+
+.topic-resources a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.topic-resources a:hover {
+  text-decoration: underline;
+}
+
+.topic-prerequisites {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.roadmap-visualization {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.learning-path-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.empty-state {
+  background: white;
+  border-radius: 20px;
+  padding: 4rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+}
+
+.empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .learning-path-content {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-visualization {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .path-progress {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+  }
+}
+
