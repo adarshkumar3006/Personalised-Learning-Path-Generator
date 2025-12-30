@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import RoadmapVisualization from '../components/RoadmapVisualization';
+import { FiMap, FiCheckCircle, FiCircle, FiClock, FiBook, FiTrendingUp } from 'react-icons/fi';
 import './LearningPath.css';
 
 const LearningPath = () => {
@@ -119,7 +120,9 @@ const LearningPath = () => {
     return (
       <div className="learning-path-empty">
         <div className="empty-state">
-          <div className="empty-icon">📚</div>
+          <div className="empty-icon">
+            <FiBook />
+          </div>
           <h2>No Learning Path Yet</h2>
           <p>
             Complete at least one assessment to generate your personalized
@@ -142,13 +145,21 @@ const LearningPath = () => {
   return (
     <div className="learning-path-page">
       <div className="learning-path-header">
-        <div>
-          <h1>{learningPath.title}</h1>
-          <p className="path-description">{learningPath.description}</p>
+        <div className="header-content">
+          <div className="header-icon-wrapper">
+            <FiMap className="header-icon" />
+          </div>
+          <div>
+            <h1>{learningPath.title}</h1>
+            <p className="path-description">{learningPath.description}</p>
+          </div>
         </div>
         <div className="path-progress">
           <div className="progress-info">
-            <span className="progress-label">Progress</span>
+            <span className="progress-label">
+              <FiTrendingUp className="progress-icon" />
+              Progress
+            </span>
             <span className="progress-value">
               {learningPath.progress.completedTopics} / {learningPath.progress.totalTopics} topics
             </span>
@@ -177,11 +188,17 @@ const LearningPath = () => {
             >
               <div className="topic-header">
                 <div className="topic-checkbox">
+                  {topic.completed ? (
+                    <FiCheckCircle className="checkbox-icon completed" />
+                  ) : (
+                    <FiCircle className="checkbox-icon" />
+                  )}
                   <input
                     type="checkbox"
                     checked={topic.completed}
                     onChange={() => handleTopicToggle(topic.id, topic.completed)}
                     onClick={(e) => e.stopPropagation()}
+                    className="checkbox-input"
                   />
                 </div>
                 <div className="topic-info">
@@ -190,7 +207,10 @@ const LearningPath = () => {
                     <span className={`difficulty-badge ${topic.difficulty.toLowerCase()}`}>
                       {topic.difficulty}
                     </span>
-                    <span className="topic-hours">⏱ {topic.estimatedHours} hours</span>
+                    <span className="topic-hours">
+                      <FiClock className="hours-icon" />
+                      {topic.estimatedHours} hours
+                    </span>
                   </div>
                 </div>
               </div>

@@ -37,30 +37,30 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/learning-
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => {
-  console.log('✅ Connected to MongoDB');
-  
-  // Create demo user if it doesn't exist
-  const User = require('./models/User');
-  User.findOne({ email: 'demo@example.com' }).then(user => {
-    if (!user) {
-      const bcrypt = require('bcryptjs');
-      User.create({
-        name: 'Demo User',
-        email: 'demo@example.com',
-        password: bcrypt.hashSync('demo123', 10)
-      }).then(() => console.log('✅ Demo user created'));
-    }
+  .then(() => {
+    console.log(' Connected to MongoDB');
+
+    // Create demo user if it doesn't exist
+    const User = require('./models/User');
+    User.findOne({ email: 'demo@example.com' }).then(user => {
+      if (!user) {
+        const bcrypt = require('bcryptjs');
+        User.create({
+          name: 'Demo User',
+          email: 'demo@example.com',
+          password: bcrypt.hashSync('demo123', 10)
+        }).then(() => console.log(' Demo user created'));
+      }
+    });
+  })
+  .catch(err => {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
   });
-})
-.catch(err => {
-  console.error('❌ MongoDB connection error:', err);
-  process.exit(1);
-});
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });
 

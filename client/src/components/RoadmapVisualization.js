@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { FiDownload, FiCheckCircle, FiCircle } from 'react-icons/fi';
 import './RoadmapVisualization.css';
 
 const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
@@ -189,20 +190,129 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
   }, [topics, selectedTopic, dimensions]);
 
   const handleExportPDF = async () => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !topics || topics.length === 0) return;
 
     try {
-      const canvas = await html2canvas(containerRef.current, {
-        scale: 2,
-        backgroundColor: '#ffffff',
+      const pdf = new jsPDF('portrait', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      const contentWidth = pageWidth - (margin * 2);
+      let yPosition = margin;
+
+      // Header Section
+      pdf.setFillColor(102, 126, 234);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Learning Roadmap', margin, 25);
+
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Generated on ${new Date().toLocaleDateString()}`, margin, 35);
+
+      yPosition = 50;
+
+      // Summary Section
+      const completedCount = topics.filter(t => t.completed).length;
+      const totalCount = topics.length;
+      const progressPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+      pdf.setTextColor(51, 51, 51);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Progress Summary', margin, yPosition);
+      yPosition += 8;
+
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Completed: ${completedCount} / ${totalCount} topics (${progressPercentage}%)`, margin, yPosition);
+      yPosition += 15;
+
+      // Topics Section
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Learning Topics', margin, yPosition);
+      yPosition += 10;
+
+      const sortedTopics = [...topics].sort((a, b) => a.order - b.order);
+
+      sortedTopics.forEach((topic, index) => {
+        // Check if we need a new page
+        if (yPosition > pageHeight - 40) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+
+        // Topic Card Background
+        const cardHeight = 35;
+        pdf.setDrawColor(221, 221, 221);
+        if (topic.completed) {
+          pdf.setFillColor(241, 248, 233);
+        } else {
+          pdf.setFillColor(255, 255, 255);
+        }
+        pdf.roundedRect(margin, yPosition - cardHeight + 5, contentWidth, cardHeight, 3, 3, 'FD');
+
+        // Completion Checkbox
+        if (topic.completed) {
+          pdf.setFillColor(139, 195, 74);
+          pdf.circle(margin + 8, yPosition - cardHeight + 20, 4, 'F');
+          pdf.setTextColor(255, 255, 255);
+          pdf.setFontSize(10);
+          pdf.text('✓', margin + 5.5, yPosition - cardHeight + 22);
+        } else {
+          pdf.setDrawColor(204, 204, 204);
+          pdf.circle(margin + 8, yPosition - cardHeight + 20, 4, 'D');
+        }
+
+        // Topic Title
+        pdf.setTextColor(51, 51, 51);
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        const titleX = margin + 20;
+        pdf.text(topic.title, titleX, yPosition - cardHeight + 15);
+
+        // Topic Meta Information
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(102, 102, 102);
+
+        const difficultyColor = topic.difficulty === 'Beginner' ? [46, 125, 50] :
+          topic.difficulty === 'Intermediate' ? [230, 81, 0] : [194, 24, 91];
+        pdf.setTextColor(difficultyColor[0], difficultyColor[1], difficultyColor[2]);
+        pdf.text(`${topic.difficulty}`, titleX, yPosition - cardHeight + 25);
+
+        pdf.setTextColor(102, 102, 102);
+        pdf.text(`• ${topic.estimatedHours} hours`, titleX + 30, yPosition - cardHeight + 25);
+
+        // Topic Description (truncated if too long)
+        if (topic.description) {
+          const descriptionLines = pdf.splitTextToSize(topic.description, contentWidth - 25);
+          pdf.setFontSize(8);
+          pdf.setTextColor(102, 102, 102);
+          pdf.text(descriptionLines[0] || '', titleX, yPosition - cardHeight + 32);
+        }
+
+        yPosition += cardHeight + 5;
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('landscape', 'mm', 'a4');
-      const imgWidth = 297; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      // Footer
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(153, 153, 153);
+        pdf.text(
+          `Page ${i} of ${totalPages}`,
+          pageWidth / 2,
+          pageHeight - 10,
+          { align: 'center' }
+        );
+      }
 
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('learning-roadmap.pdf');
     } catch (error) {
       console.error('Error exporting PDF:', error);
@@ -223,7 +333,8 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
       <div className="roadmap-header">
         <h3>Learning Roadmap</h3>
         <button onClick={handleExportPDF} className="btn-export">
-          Export PDF
+          <FiDownload className="export-icon" />
+          <span>Export PDF</span>
         </button>
       </div>
       <div className="roadmap-svg-container">

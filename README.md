@@ -128,12 +128,6 @@ Personalized Learning Path Generator/
 4. **Track Progress**: Mark topics as completed as you learn
 5. **Export PDF**: Download your learning roadmap as PDF
 
-## 📚 GitHub Setup Guide
-
-For complete instructions on pushing this project to GitHub with proper commit order and best practices, see **[GITHUB_PUSH_GUIDE.md](./GITHUB_PUSH_GUIDE.md)**
-
-Quick push script available: Run `push-to-github.ps1` in PowerShell
-
 ## License
 
 MIT

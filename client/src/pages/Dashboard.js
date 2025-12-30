@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { 
+  FiClipboard, 
+  FiTrendingUp, 
+  FiCheckCircle, 
+  FiArrowRight,
+  FiUser,
+  FiMap
+} from 'react-icons/fi';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -89,64 +97,97 @@ const Dashboard = () => {
       <h1>Welcome back, {user?.name}!</h1>
 
       <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon"></div>
+        <Link to="/assessments" className="stat-card stat-card-primary">
+          <div className="stat-icon">
+            <FiClipboard />
+          </div>
           <div className="stat-content">
             <h3>{stats.assessmentsCompleted}</h3>
             <p>Assessments Completed</p>
           </div>
-        </div>
+          <FiArrowRight className="stat-arrow" />
+        </Link>
 
-        <div className="stat-card">
-          <div className="stat-icon"></div>
+        <Link to="/learning-path" className="stat-card stat-card-success">
+          <div className="stat-icon">
+            <FiTrendingUp />
+          </div>
           <div className="stat-content">
             <h3>{stats.learningPathProgress}%</h3>
             <p>Learning Path Progress</p>
           </div>
-        </div>
+          <FiArrowRight className="stat-arrow" />
+        </Link>
 
-        <div className="stat-card">
-          <div className="stat-icon"></div>
+        <Link to="/learning-path" className="stat-card stat-card-info">
+          <div className="stat-icon">
+            <FiCheckCircle />
+          </div>
           <div className="stat-content">
             <h3>{stats.topicsCompleted}/{stats.totalTopics}</h3>
             <p>Topics Completed</p>
           </div>
-        </div>
+          <FiArrowRight className="stat-arrow" />
+        </Link>
       </div>
 
       <div className="dashboard-actions">
-        <Link to="/assessments" className="action-card">
-          <div className="action-icon"></div>
-          <h3>Take Assessment</h3>
-          <p>Test your skills in various subjects</p>
+        <Link to="/assessments" className="action-card action-card-primary">
+          <div className="action-icon">
+            <FiClipboard />
+          </div>
+          <div className="action-content">
+            <h3>Take Assessment</h3>
+            <p>Test your skills in various subjects</p>
+          </div>
+          <FiArrowRight className="action-arrow" />
         </Link>
 
         {stats.assessmentsCompleted > 0 ? (
           user?.learningPath ? (
-            <Link to="/learning-path" className="action-card">
-              <div className="action-icon"></div>
-              <h3>View Learning Path</h3>
-              <p>See your personalized roadmap</p>
+            <Link to="/learning-path" className="action-card action-card-success">
+              <div className="action-icon">
+                <FiMap />
+              </div>
+              <div className="action-content">
+                <h3>View Learning Path</h3>
+                <p>See your personalized roadmap</p>
+              </div>
+              <FiArrowRight className="action-arrow" />
             </Link>
           ) : (
-            <Link to="/learning-path" className="action-card">
-              <div className="action-icon"></div>
-              <h3>Generate Learning Path</h3>
-              <p>Click to generate your personalized path</p>
+            <Link to="/learning-path" className="action-card action-card-success">
+              <div className="action-icon">
+                <FiMap />
+              </div>
+              <div className="action-content">
+                <h3>Generate Learning Path</h3>
+                <p>Click to generate your personalized path</p>
+              </div>
+              <FiArrowRight className="action-arrow" />
             </Link>
           )
         ) : (
-          <div className="action-card disabled">
-            <div className="action-icon"></div>
-            <h3>Generate Learning Path</h3>
-            <p>Complete assessments first to generate your path</p>
+          <div className="action-card action-card-disabled">
+            <div className="action-icon">
+              <FiMap />
+            </div>
+            <div className="action-content">
+              <h3>Generate Learning Path</h3>
+              <p>Complete assessments first to generate your path</p>
+            </div>
           </div>
         )}
 
-        <Link to="/profile" className="action-card">
-          <div className="action-icon"></div>
-          <h3>View Profile</h3>
-          <p>See your assessment history</p>
+        <Link to="/profile" className="action-card action-card-info">
+          <div className="action-icon">
+            <FiUser />
+          </div>
+          <div className="action-content">
+            <h3>View Profile</h3>
+            <p>See your assessment history</p>
+          </div>
+          <FiArrowRight className="action-arrow" />
         </Link>
       </div>
 

@@ -8,6 +8,29 @@
   padding: 2rem;
   margin-bottom: 2rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.header-icon-wrapper {
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-icon {
+  font-size: 2.5rem;
+  color: #667eea;
 }
 
 .learning-path-header h1 {
@@ -17,7 +40,7 @@
 
 .path-description {
   color: #666;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .path-progress {
@@ -35,6 +58,14 @@
 .progress-label {
   color: #666;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-icon {
+  font-size: 1rem;
+  color: #667eea;
 }
 
 .progress-value {
@@ -113,10 +144,36 @@
   margin-bottom: 1rem;
 }
 
-.topic-checkbox input[type="checkbox"] {
+.topic-checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-icon {
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.checkbox-icon.completed {
+  color: #10b981;
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
   width: 24px;
   height: 24px;
   cursor: pointer;
+  z-index: 1;
+}
+
+.checkbox-input:hover + .checkbox-icon,
+.checkbox-input:checked + .checkbox-icon {
+  transform: scale(1.1);
 }
 
 .topic-info {
@@ -137,6 +194,13 @@
 
 .topic-hours {
   color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hours-icon {
   font-size: 0.9rem;
 }
 
@@ -210,6 +274,13 @@
 .empty-icon {
   font-size: 5rem;
   margin-bottom: 1rem;
+  color: #667eea;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-state h2 {

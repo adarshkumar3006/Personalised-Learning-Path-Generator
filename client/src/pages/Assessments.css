@@ -2,6 +2,24 @@
   width: 100%;
 }
 
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.header-icon {
+  font-size: 3.5rem;
+  color: white;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .assessments-page h1 {
   color: white;
   font-size: 2.5rem;
@@ -12,7 +30,7 @@
 .page-subtitle {
   color: rgba(255, 255, 255, 0.9);
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .assessments-grid {
@@ -26,25 +44,45 @@
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 .assessment-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
 }
 
 .assessment-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.assessment-icon {
+  font-size: 2.5rem;
+  color: #667eea;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.assessment-title-section {
+  flex: 1;
 }
 
 .assessment-header h3 {
   color: #333;
   font-size: 1.5rem;
-  flex: 1;
+  margin-bottom: 0.25rem;
 }
 
 .difficulty-badge {
@@ -72,21 +110,35 @@
 .assessment-subject {
   color: #667eea;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 0;
 }
 
 .assessment-description {
   color: #666;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  flex: 1;
 }
 
 .assessment-meta {
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #999;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
   font-size: 0.9rem;
+}
+
+.meta-icon {
+  font-size: 1rem;
+  color: #999;
 }
 
 .no-assessments {
@@ -95,11 +147,59 @@
   padding: 3rem;
   text-align: center;
   color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: #ccc;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s;
+}
+
+.btn-primary:hover .btn-icon {
+  transform: translateX(3px);
 }
 
 @media (max-width: 768px) {
   .assessments-grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
