@@ -3,10 +3,9 @@
 }
 
 .dashboard h1 {
-  color: white;
+  color: #0f172a;
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .stats-grid {
@@ -67,6 +66,26 @@
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
 }
 
+.stat-card-time {
+  border-left-color: #f59e0b;
+}
+
+.stat-card-time:hover {
+  border-left-color: #d97706;
+  border-left-width: 6px;
+  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.3);
+}
+
+.stat-card-points {
+  border-left-color: #ec4899;
+}
+
+.stat-card-points:hover {
+  border-left-color: #db2777;
+  border-left-width: 6px;
+  box-shadow: 0 15px 35px rgba(236, 72, 153, 0.3);
+}
+
 .stat-icon {
   font-size: 3rem;
   padding: 1rem;
@@ -107,6 +126,35 @@
 .stat-card-info:hover .stat-icon {
   transform: scale(1.1) rotate(5deg);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.stat-card-time .stat-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.stat-card-time:hover .stat-icon {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+.stat-card-points .stat-icon {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.stat-card-points:hover .stat-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+}
+
+.stat-subtext {
+  display: block;
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 0.25rem;
 }
 
 .stat-content h3 {

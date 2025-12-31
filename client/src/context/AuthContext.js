@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -19,16 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/auth/me`);
       setUser(response.data);
@@ -37,10 +28,20 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('token');
       setToken(null);
       delete axios.defaults.headers.common['Authorization'];
+      setUser(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, [token, fetchUser]);
 
   const login = async (email, password) => {
     try {

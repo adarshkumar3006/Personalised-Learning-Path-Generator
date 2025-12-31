@@ -9,7 +9,7 @@ import {
   FiUser, 
   FiLogIn, 
   FiUserPlus,
-  FiLogOut 
+  FiLogOut
 } from 'react-icons/fi';
 import './Navbar.css';
 

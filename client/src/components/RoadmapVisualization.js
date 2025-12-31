@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { FiDownload, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import { FiDownload } from 'react-icons/fi';
 import './RoadmapVisualization.css';
 
 const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
@@ -18,13 +17,7 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
     setDimensions({ width: 600, height });
   }, [topics]);
 
-  useEffect(() => {
-    if (topics && topics.length > 0) {
-      drawRoadmap();
-    }
-  }, [topics, selectedTopic, dimensions]);
-
-  const drawRoadmap = React.useCallback(() => {
+  const drawRoadmap = useCallback(() => {
     if (!svgRef.current || !topics || topics.length === 0) return;
 
     const svg = d3.select(svgRef.current);
@@ -40,7 +33,6 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     const contentWidth = width - margin.left - margin.right;
-    const contentHeight = height - margin.top - margin.bottom;
 
     // Sort topics by order
     const sortedTopics = [...topics].sort((a, b) => a.order - b.order);
@@ -76,7 +68,7 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
     });
 
     // Draw links
-    const link = g
+    g
       .append('g')
       .selectAll('line')
       .data(links)
@@ -187,7 +179,13 @@ const RoadmapVisualization = ({ topics, onTopicSelect, selectedTopic }) => {
           .attr('stroke-width', (d) => (selectedTopic?.id === d.id ? 3 : 2))
           .attr('stroke', (d) => (selectedTopic?.id === d.id ? '#764ba2' : '#ddd'));
       });
-  }, [topics, selectedTopic, dimensions]);
+  }, [topics, selectedTopic, dimensions, onTopicSelect]);
+
+  useEffect(() => {
+    if (topics && topics.length > 0) {
+      drawRoadmap();
+    }
+  }, [topics, selectedTopic, dimensions, drawRoadmap]);
 
   const handleExportPDF = async () => {
     if (!containerRef.current || !topics || topics.length === 0) return;

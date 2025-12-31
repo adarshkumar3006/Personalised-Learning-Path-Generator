@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ReviewSection from '../components/ReviewSection';
 import './AssessmentDetail.css';
 
 const AssessmentDetail = () => {
@@ -18,28 +19,7 @@ const AssessmentDetail = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAssessment();
-  }, [id]);
-
-  useEffect(() => {
-    if (assessment && timeRemaining === null) {
-      setTimeRemaining(assessment.duration * 60); // Convert to seconds
-    }
-  }, [assessment]);
-
-  useEffect(() => {
-    if (timeRemaining !== null && timeRemaining > 0 && !submitted) {
-      const timer = setTimeout(() => {
-        setTimeRemaining(timeRemaining - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else if (timeRemaining === 0 && !submitted) {
-      handleSubmit();
-    }
-  }, [timeRemaining, submitted]);
-
-  const fetchAssessment = async () => {
+  const fetchAssessment = useCallback(async () => {
     try {
       const response = await api.get(`/assessments/${id}`);
       setAssessment(response.data);
@@ -55,14 +35,18 @@ const AssessmentDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const handleAnswerChange = (questionId, answer) => {
-    setAnswers({
-      ...answers,
-      [questionId]: answer,
-    });
-  };
+  useEffect(() => {
+    fetchAssessment();
+  }, [fetchAssessment]);
+
+  useEffect(() => {
+    if (assessment && timeRemaining === null) {
+      setTimeRemaining(assessment.duration * 60); // Convert to seconds
+    }
+  }, [assessment, timeRemaining]);
+
 
   const handleNext = () => {
     if (currentQuestion < assessment.questions.length - 1) {
@@ -76,7 +60,7 @@ const AssessmentDetail = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (submitted) return;
 
     // Check if all questions are answered
@@ -114,12 +98,30 @@ const AssessmentDetail = () => {
       toast.error('Failed to submit assessment');
       setSubmitted(false);
     }
-  };
+  }, [assessment, answers, id, submitted, fetchUser]);
+
+  useEffect(() => {
+    if (timeRemaining !== null && timeRemaining > 0 && !submitted) {
+      const timer = setTimeout(() => {
+        setTimeRemaining(timeRemaining - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (timeRemaining === 0 && !submitted) {
+      handleSubmit();
+    }
+  }, [timeRemaining, submitted, handleSubmit]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleAnswerChange = (questionId, answer) => {
+    setAnswers({
+      ...answers,
+      [questionId]: answer,
+    });
   };
 
   if (loading) {
@@ -157,6 +159,9 @@ const AssessmentDetail = () => {
             >
               Generate Learning Path
             </button>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <ReviewSection type="assessment" targetId={assessment._id} />
           </div>
         </div>
       </div>
@@ -248,6 +253,10 @@ const AssessmentDetail = () => {
           </button>
         ))}
       </div>
+
+      {assessment && (
+        <ReviewSection type="Assessment" targetId={assessment._id} />
+      )}
     </div>
   );
 };

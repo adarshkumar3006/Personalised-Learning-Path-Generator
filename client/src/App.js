@@ -14,62 +14,67 @@ import Assessments from './pages/Assessments';
 import AssessmentDetail from './pages/AssessmentDetail';
 import LearningPath from './pages/LearningPath';
 import Profile from './pages/Profile';
+import useTimeTracker from './hooks/useTimeTracker';
 
 import './App.css';
 
-function App() {
+function AppContent() {
+  useTimeTracker(); // Track time spent on website
+
   return (
-    <AuthProvider>
+    <>
       <Router>
         <div className="App">
           <Navbar />
           <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/assessments"
-                element={
-                  <PrivateRoute>
-                    <Assessments />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/assessments/:id"
-                element={
-                  <PrivateRoute>
-                    <AssessmentDetail />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/learning-path"
-                element={
-                  <PrivateRoute>
-                    <LearningPath />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+            <div className="main-container">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/assessments"
+                  element={
+                    <PrivateRoute>
+                      <Assessments />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/assessments/:id"
+                  element={
+                    <PrivateRoute>
+                      <AssessmentDetail />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learning-path"
+                  element={
+                    <PrivateRoute>
+                      <LearningPath />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
           </main>
           <ToastContainer
             position="top-right"
@@ -84,6 +89,14 @@ function App() {
           />
         </div>
       </Router>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

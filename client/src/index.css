@@ -10,9 +10,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
   background-attachment: fixed;
   min-height: 100vh;
+}
+
+/* Use a darker heading color so headings are visible against the app background */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #0f172a;
 }
 
 code {
@@ -23,4 +33,3 @@ code {
 #root {
   min-height: 100vh;
 }
-

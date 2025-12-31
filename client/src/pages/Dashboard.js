@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
@@ -9,7 +9,9 @@ import {
   FiCheckCircle, 
   FiArrowRight,
   FiUser,
-  FiMap
+  FiMap,
+  FiClock,
+  FiAward
 } from 'react-icons/fi';
 import './Dashboard.css';
 
@@ -20,16 +22,13 @@ const Dashboard = () => {
     learningPathProgress: 0,
     topicsCompleted: 0,
     totalTopics: 0,
+    totalTimeSpent: { hours: 0, minutes: 0 },
+    weeklyTimeSpent: { hours: 0, minutes: 0 },
+    points: 0,
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user?._id) {
-      fetchDashboardData();
-    }
-  }, [user?._id]);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -56,6 +55,15 @@ const Dashboard = () => {
 
       const assessmentsCount = currentUser?.assessments?.length || 0;
 
+      // Fetch activity stats
+      let activityStats = { totalTimeSpent: { hours: 0, minutes: 0 }, weeklyTimeSpent: { hours: 0, minutes: 0 }, points: 0 };
+      try {
+        const activityResponse = await api.get('/activity/stats');
+        activityStats = activityResponse.data;
+      } catch (error) {
+        console.error('Error fetching activity stats:', error);
+      }
+
       if (currentUser?.learningPath) {
         const response = await api.get(`/learning-paths/${currentUser._id}`);
         const learningPath = response.data;
@@ -65,6 +73,9 @@ const Dashboard = () => {
           learningPathProgress: learningPath.progress?.percentage || 0,
           topicsCompleted: learningPath.progress?.completedTopics || 0,
           totalTopics: learningPath.progress?.totalTopics || 0,
+          totalTimeSpent: activityStats.totalTimeSpent || { hours: 0, minutes: 0 },
+          weeklyTimeSpent: activityStats.weeklyTimeSpent || { hours: 0, minutes: 0 },
+          points: activityStats.points || 0,
         });
       } else {
         setStats({
@@ -72,6 +83,9 @@ const Dashboard = () => {
           learningPathProgress: 0,
           topicsCompleted: 0,
           totalTopics: 0,
+          totalTimeSpent: activityStats.totalTimeSpent || { hours: 0, minutes: 0 },
+          weeklyTimeSpent: activityStats.weeklyTimeSpent || { hours: 0, minutes: 0 },
+          points: activityStats.points || 0,
         });
       }
     } catch (error) {
@@ -82,11 +96,20 @@ const Dashboard = () => {
         learningPathProgress: 0,
         topicsCompleted: 0,
         totalTopics: 0,
+        totalTimeSpent: { hours: 0, minutes: 0 },
+        weeklyTimeSpent: { hours: 0, minutes: 0 },
+        points: user?.points || 0,
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?._id, fetchUser]);
+
+  useEffect(() => {
+    if (user?._id) {
+      fetchDashboardData();
+    }
+  }, [user?._id, fetchDashboardData]);
 
   if (loading) {
     return <LoadingSpinner message="Loading dashboard..." />;
@@ -129,6 +152,27 @@ const Dashboard = () => {
           </div>
           <FiArrowRight className="stat-arrow" />
         </Link>
+
+        <div className="stat-card stat-card-time">
+          <div className="stat-icon">
+            <FiClock />
+          </div>
+          <div className="stat-content">
+            <h3>{stats.totalTimeSpent.hours}h {stats.totalTimeSpent.minutes}m</h3>
+            <p>Total Time Spent</p>
+            <span className="stat-subtext">This week: {stats.weeklyTimeSpent.hours}h {stats.weeklyTimeSpent.minutes}m</span>
+          </div>
+        </div>
+
+        <div className="stat-card stat-card-points">
+          <div className="stat-icon">
+            <FiAward />
+          </div>
+          <div className="stat-content">
+            <h3>{stats.points}</h3>
+            <p>Points Earned</p>
+          </div>
+        </div>
       </div>
 
       <div className="dashboard-actions">

@@ -7,8 +7,7 @@ import {
   FiMap, 
   FiTrendingUp, 
   FiFileText, 
-  FiUser,
-  FiArrowRight
+  FiUser
 } from 'react-icons/fi';
 import './Home.css';
 

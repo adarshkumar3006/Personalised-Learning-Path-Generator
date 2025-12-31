@@ -29,105 +29,114 @@ A comprehensive MERN stack application that generates custom learning paths for 
 
 1. **Clone the repository**
 
-   ```bash
-   git clone <repository-url>
-   cd "Personalized Learning Path Generator"
-   ```
+# Personalized Learning Path Generator
 
-2. **Install dependencies**
+Personalized Learning Path Generator is a MERN stack application that creates tailored learning paths for users based on skill assessments, tracks progress, and provides curated video and documentation resources.
 
-   ```bash
-   npm run install-all
-   ```
+Overview
 
-3. **Set up environment variables**
+This project provides:
 
-   Create a `.env` file in the `server` directory:
+- Skill assessments to evaluate user knowledge
+- AI-assisted recommendations for generating personalized learning paths
+- Video resources and progress tracking
+- Time spent tracking and a weekly leaderboard
+- User profiles with assessment history and reviews
 
-   ```env
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/learning-path-generator
-   GEMINI_API_KEY=your_gemini_api_key_here
-   JWT_SECRET=your_jwt_secret_here
-   NODE_ENV=development
-   ```
+Tech stack
 
-   Create a `.env` file in the `client` directory:
+- Frontend: React
+- Backend: Node.js and Express
+- Database: MongoDB (Mongoose)
+- Optional: Google Gemini / Claude for AI-assisted recommendations
 
-   ```env
-   REACT_APP_API_URL=http://localhost:5000/api
-   ```
+Prerequisites
 
-4. **Start MongoDB**
+- Node.js v16 or newer
+- MongoDB (local or Atlas)
 
-   ```bash
-   # If using local MongoDB
-   mongod
-   ```
+Installation
 
-5. **Run the application**
+1. Clone the repository and change into the project folder
 
-   ```bash
-   npm run dev
-   ```
+2. Install server dependencies
 
-   This will start both the backend server (port 5000) and frontend (port 3000).
+   cd server
+   npm install
 
-## Demo Account
+3. Install client dependencies
 
-- **Email**: demo@example.com
-- **Password**: demo123
+   cd ../client
+   npm install
 
-## Project Structure
+Configuration
 
-```
+Create a .env file in the server folder with the following variables
+
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/learning-path-generator
+GEMINI_API_KEY=your_gemini_api_key_here
+JWT_SECRET=your_jwt_secret_here
+
+Create a .env file in the client folder with
+
+REACT_APP_API_URL=http://localhost:5000/api
+
+Seeding sample videos
+
+The project contains a server/scripts/seedVideos.js script that upserts a curated list of YouTube videos into the database. Run it after starting the backend to populate video data.
+
+Run the application (development)
+
+Start the backend
+
+cd server
+npm run dev
+
+Start the frontend in a separate terminal
+
+cd client
+npm start
+
+Project structure (high level)
+
 Personalized Learning Path Generator/
-├── server/
-│   ├── config/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   └── index.js
-├── client/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   └── App.js
-│   └── public/
-└── README.md
-```
+server/ - backend code, routes, models and scripts
+client/ - React application and UI components
+README.md - this file
 
-## API Endpoints
+API endpoints (selected)
 
-### Authentication
+Authentication
 
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user
+POST /api/auth/register - register a new user
+POST /api/auth/login - login
+GET /api/auth/me - get current user
 
-### Assessments
+Assessments
 
-- `GET /api/assessments` - Get all available assessments
-- `GET /api/assessments/:id` - Get specific assessment
-- `POST /api/assessments/submit` - Submit assessment results
+GET /api/assessments - list assessments
+GET /api/assessments/:id - get assessment
+POST /api/assessments/submit - submit assessment answers
 
-### Learning Paths
+Learning paths
 
-- `GET /api/learning-paths/:userId` - Get user's learning path
-- `POST /api/learning-paths/generate` - Generate new learning path
-- `PUT /api/learning-paths/:id/topic/:topicId` - Update topic completion status
+GET /api/learning-paths/:userId - fetch user's learning path
+POST /api/learning-paths/generate - generate learning path
+PUT /api/learning-paths/:id/topic/:topicId - toggle topic completion
 
-## Usage
+Activity and leaderboard
 
-1. **Register/Login**: Create an account or use the demo account
-2. **Take Assessment**: Complete skill assessments for different subjects
-3. **View Learning Path**: AI-generated personalized learning roadmap
-4. **Track Progress**: Mark topics as completed as you learn
-5. **Export PDF**: Download your learning roadmap as PDF
+POST /api/activity/track-time - record seconds of time spent (protected)
+GET /api/activity/stats - get user time and stats (protected)
+GET /api/leaderboard - get current week leaderboard
 
-## License
+Usage notes
+
+- Complete an assessment to generate a learning path
+- Watch videos using the YouTube player; progress is tracked and saved
+- Use reviews and feedback to rate assessments and learning paths
+
+License
 
 MIT

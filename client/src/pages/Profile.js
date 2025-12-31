@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -9,11 +9,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       await fetchUser();
       if (user?._id) {
@@ -25,7 +21,11 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?._id, fetchUser]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   if (loading) {
     return <LoadingSpinner message="Loading profile..." />;
