@@ -41,6 +41,50 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'LearningPath',
   },
+  points: {
+    type: Number,
+    default: 0,
+  },
+  totalTimeSpent: {
+    type: Number, // in seconds
+    default: 0,
+  },
+  weeklyTimeSpent: {
+    type: Number, // in seconds
+    default: 0,
+  },
+  lastActiveAt: {
+    type: Date,
+    default: Date.now,
+  },
+  videoProgress: [{
+    videoId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Video',
+    },
+    watchedDuration: {
+      type: Number, // in seconds
+      default: 0,
+    },
+    totalDuration: {
+      type: Number,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+    lastWatchedAt: {
+      type: Date,
+      default: Date.now,
+    },
+  }],
+  weeklyStats: {
+    weekStart: Date,
+    timeSpent: Number,
+    videosWatched: Number,
+    assessmentsCompleted: Number,
+    pointsEarned: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
