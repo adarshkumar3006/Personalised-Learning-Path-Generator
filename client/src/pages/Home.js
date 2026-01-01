@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// removed unused imports (Link and useAuth) — hero actions were removed
 import {
   FiClipboard,
   FiZap,
@@ -13,31 +12,16 @@ import './Home.css';
 import ProductList from '../components/ProductList';
 
 const Home = () => {
-  const { isAuthenticated } = useAuth();
+  // hero shows only title and subtitle now; authentication not needed here
 
   return (
     <div className="home">
       <div className="hero-section">
-        <h1 className="hero-title">Personalized Learning Path Generator</h1>
+        <h1 className="hero-title">SkillPath</h1>
         <p className="hero-subtitle">
-          AI-powered custom learning paths tailored to your skills and goals
+          Learn smarter. Progress faster. Succeed your way.
         </p>
-        {!isAuthenticated ? (
-          <div className="hero-actions">
-            <Link to="/register" className="btn btn-primary">
-              Get Started
-            </Link>
-            <Link to="/login" className="btn btn-secondary">
-              Login
-            </Link>
-          </div>
-        ) : (
-          <div className="hero-actions">
-            <Link to="/dashboard" className="btn btn-primary">
-              Go to Dashboard
-            </Link>
-          </div>
-        )}
+        {/* Only show title and tagline in hero - action buttons removed */}
       </div>
 
       <div className="features-section">

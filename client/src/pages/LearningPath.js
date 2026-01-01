@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import RoadmapVisualization from '../components/RoadmapVisualization';
 import ReviewSection from '../components/ReviewSection';
 import Leaderboard from '../components/Leaderboard';
-import { FiMap, FiCheckCircle, FiCircle, FiClock, FiBook, FiTrendingUp, FiPlay, FiExternalLink, FiVideo, FiYoutube } from 'react-icons/fi';
+import { FiMap, FiCheckCircle, FiCircle, FiClock, FiBook, FiTrendingUp, FiExternalLink, FiVideo, FiYoutube } from 'react-icons/fi';
 import './LearningPath.css';
 import FixedFooter from '../components/FixedFooter';
 
@@ -18,10 +18,9 @@ const LearningPath = () => {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
   const [topicVideos, setTopicVideos] = useState({});
   const [activeTab, setActiveTab] = useState('topics'); // 'topics', 'videos', 'docs', 'leaderboard'
-  const [timeSpent, setTimeSpent] = useState({ hours: 0, minutes: 0 });
+
 
   const fetchLearningPath = React.useCallback(async () => {
     try {

@@ -11,8 +11,7 @@ import {
   FiArrowRight,
   FiUser,
   FiMap,
-  FiClock,
-  FiAward
+  FiClock
 } from 'react-icons/fi';
 import './Dashboard.css';
 

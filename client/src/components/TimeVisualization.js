@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './TimeVisualization.css';
 import api from '../services/api';
 
@@ -6,7 +6,7 @@ const TimeVisualization = ({ weeklyTime = { hours: 0, minutes: 0 }, totalTime = 
    const [bars, setBars] = useState(Array.from({ length: 24 }, (_, i) => ({ hour: i, minutes: 0 })));
    const mounted = useRef(false);
 
-   const fetchHourly = async () => {
+   const fetchHourly = useCallback(async () => {
       try {
          const resp = await api.get('/activity/stats');
          const hourly = resp.data.hourlyUsage || resp.data.weeklyStats?.hourly || Array.from({ length: 24 }, () => 0);
@@ -27,7 +27,7 @@ const TimeVisualization = ({ weeklyTime = { hours: 0, minutes: 0 }, totalTime = 
          const minuteBars = weights.map((w, i) => ({ hour: i, minutes: Math.round((w / weightSum) * totalMinutes) }));
          setBars(minuteBars);
       }
-   };
+   }, [totalTime]);
 
    useEffect(() => {
       mounted.current = true;
@@ -40,7 +40,7 @@ const TimeVisualization = ({ weeklyTime = { hours: 0, minutes: 0 }, totalTime = 
          mounted.current = false;
          clearInterval(id);
       };
-   }, []);
+   }, [fetchHourly]);
 
    const maxMin = Math.max(...bars.map((b) => b.minutes)) || 1;
 
