@@ -30,7 +30,7 @@ const Navbar = () => {
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
           <FiBookOpen className="brand-icon" />
-          <span>Learning Path Generator</span>
+          <span>SkillPath</span>
         </Link>
         <button
           className="navbar-toggle"

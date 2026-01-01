@@ -60,12 +60,22 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/learning-
   })
   .catch(err => {
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
+    console.warn('Continuing without DB connection. Some features may be unavailable.');
+    // don't exit process so nodemon won't crash — allow dev server to stay up for debugging
   });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(` Server running on port ${PORT}`);
+});
+
+// Better error visibility during development
+process.on('unhandledRejection', (reason, p) => {
+  console.error('Unhandled Rejection at:', p, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
 });
 
