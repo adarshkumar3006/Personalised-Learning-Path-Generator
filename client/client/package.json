@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "learning-path-client": "file:.."
+  }
+}

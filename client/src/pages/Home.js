@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  FiClipboard, 
-  FiZap, 
-  FiMap, 
-  FiTrendingUp, 
-  FiFileText, 
+import {
+  FiClipboard,
+  FiZap,
+  FiMap,
+  FiTrendingUp,
+  FiFileText,
   FiUser
 } from 'react-icons/fi';
 import './Home.css';
+import ProductList from '../components/ProductList';
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
@@ -85,6 +86,9 @@ const Home = () => {
             <p>Save your assessment history and learning paths in your profile</p>
           </div>
         </div>
+      </div>
+      <div className="products-section">
+        <ProductList />
       </div>
     </div>
   );

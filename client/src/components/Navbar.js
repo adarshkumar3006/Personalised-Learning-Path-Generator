@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  FiBookOpen, 
-  FiLayout, 
-  FiClipboard, 
-  FiMap, 
-  FiUser, 
-  FiLogIn, 
+import {
+  FiBookOpen,
+  FiLayout,
+  FiClipboard,
+  FiMap,
+  FiUser,
+  FiLogIn,
   FiUserPlus,
   FiLogOut
 } from 'react-icons/fi';
@@ -16,11 +16,14 @@ import './Navbar.css';
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
+
+  const toggleMenu = () => setOpen(o => !o);
 
   return (
     <nav className="navbar">
@@ -29,7 +32,16 @@ const Navbar = () => {
           <FiBookOpen className="brand-icon" />
           <span>Learning Path Generator</span>
         </Link>
-        <div className="navbar-menu">
+        <button
+          className="navbar-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded={open}
+          onClick={toggleMenu}
+        >
+          <span className="hamburger" />
+        </button>
+
+        <div className={`navbar-menu ${open ? 'open' : ''}`}>
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className="navbar-link">

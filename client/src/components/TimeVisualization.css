@@ -1,0 +1,84 @@
+.tv-overlay {
+   position: fixed;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.45);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 9999;
+}
+
+.tv-modal {
+   background: white;
+   width: min(1000px, 92%);
+   border-radius: 12px;
+   padding: 1.25rem;
+   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.tv-close {
+   float: right;
+   border: none;
+   background: transparent;
+   font-size: 1.2rem;
+   cursor: pointer;
+}
+
+.tv-chart {
+   display: flex;
+   gap: 6px;
+   align-items: end;
+   padding: 1rem 0.5rem;
+   height: 220px;
+   overflow-x: auto;
+}
+
+.tv-bar-wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 6px;
+   width: 18px;
+}
+
+.tv-bar {
+   width: 100%;
+   background: linear-gradient(180deg, #ff9a6c, #ff7043);
+   border-radius: 6px 6px 0 0;
+   transition: all 0.15s ease;
+}
+
+.tv-bar-label {
+   font-size: 0.65rem;
+   color: rgba(255, 255, 255, 0.95);
+   text-align: center;
+   padding-top: 6px;
+}
+
+.tv-hour {
+   font-size: 0.7rem;
+   color: #666;
+}
+
+.tv-summary {
+   display: flex;
+   gap: 1.5rem;
+   justify-content: flex-end;
+   margin-top: 0.75rem;
+   color: #333;
+}
+
+.tv-summary strong {
+   display: block;
+   color: #444;
+}
+
+@media (max-width: 480px) {
+   .tv-chart {
+      height: 140px;
+   }
+
+   .tv-bar-wrapper {
+      width: 12px;
+   }
+}

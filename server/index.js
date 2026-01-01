@@ -21,6 +21,7 @@ app.use('/api/videos', require('./routes/videos'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 app.use('/api/activity', require('./routes/activity'));
+app.use('/api/products', require('./routes/products'));
 
 // Health check
 app.get('/api/health', (req, res) => {

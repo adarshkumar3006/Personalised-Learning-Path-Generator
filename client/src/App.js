@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard';
 import Assessments from './pages/Assessments';
 import AssessmentDetail from './pages/AssessmentDetail';
 import LearningPath from './pages/LearningPath';
+import TopicsCompleted from './pages/TopicsCompleted';
 import Profile from './pages/Profile';
 import useTimeTracker from './hooks/useTimeTracker';
 
@@ -61,6 +62,14 @@ function AppContent() {
                   element={
                     <PrivateRoute>
                       <LearningPath />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/learning-path/progress"
+                  element={
+                    <PrivateRoute>
+                      <TopicsCompleted />
                     </PrivateRoute>
                   }
                 />

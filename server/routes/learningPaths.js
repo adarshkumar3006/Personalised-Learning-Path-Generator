@@ -34,10 +34,10 @@ router.get('/:userId', protect, async (req, res) => {
 router.post('/generate', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('assessments.assessmentId');
-    
+
     if (!user.assessments || user.assessments.length === 0) {
-      return res.status(400).json({ 
-        message: 'Please complete at least one assessment before generating a learning path' 
+      return res.status(400).json({
+        message: 'Please complete at least one assessment before generating a learning path'
       });
     }
 
@@ -50,10 +50,10 @@ router.post('/generate', protect, async (req, res) => {
       if (assessment) {
         const subject = assessment.subject;
         subjects.push(subject);
-        
-        const level = assessmentResult.score >= 80 ? 'Advanced' : 
-                     assessmentResult.score >= 60 ? 'Intermediate' : 'Beginner';
-        
+
+        const level = assessmentResult.score >= 80 ? 'Advanced' :
+          assessmentResult.score >= 60 ? 'Intermediate' : 'Beginner';
+
         assessmentResults[subject] = {
           subject,
           score: assessmentResult.score,
@@ -62,8 +62,11 @@ router.post('/generate', protect, async (req, res) => {
       }
     }
 
-    // Generate learning path using Claude API
-    const topics = await generateLearningPath(assessmentResults, [...new Set(subjects)]);
+    // Derive completed course/assessment titles from user's assessment history (if available)
+    const completedCourses = (user.assessments || []).map(a => a.assessmentId ? a.assessmentId.title : null).filter(Boolean);
+
+    // Generate learning path using Gemini API, passing completed courses as context
+    const topics = await generateLearningPath(assessmentResults, [...new Set(subjects)], completedCourses);
 
     // Create or update learning path
     let learningPath = await LearningPath.findOne({ userId: user._id });

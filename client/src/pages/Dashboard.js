@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { 
-  FiClipboard, 
-  FiTrendingUp, 
-  FiCheckCircle, 
+import TimeVisualization from '../components/TimeVisualization';
+import {
+  FiClipboard,
+  FiTrendingUp,
+  FiCheckCircle,
   FiArrowRight,
   FiUser,
   FiMap,
@@ -27,6 +28,7 @@ const Dashboard = () => {
     points: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [showTimeViz, setShowTimeViz] = useState(false);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -103,7 +105,7 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [user?._id, fetchUser]);
+  }, [user?._id, user?.assessments?.length, user?.points, fetchUser]);
 
   useEffect(() => {
     if (user?._id) {
@@ -120,7 +122,7 @@ const Dashboard = () => {
       <h1>Welcome back, {user?.name}!</h1>
 
       <div className="stats-grid">
-        <Link to="/assessments" className="stat-card stat-card-primary">
+        <Link to="/assessments?status=completed" className="stat-card stat-card-primary">
           <div className="stat-icon">
             <FiClipboard />
           </div>
@@ -142,7 +144,7 @@ const Dashboard = () => {
           <FiArrowRight className="stat-arrow" />
         </Link>
 
-        <Link to="/learning-path" className="stat-card stat-card-info">
+        <Link to="/learning-path/progress" className="stat-card stat-card-info">
           <div className="stat-icon">
             <FiCheckCircle />
           </div>
@@ -153,7 +155,7 @@ const Dashboard = () => {
           <FiArrowRight className="stat-arrow" />
         </Link>
 
-        <div className="stat-card stat-card-time">
+        <div className="stat-card stat-card-time" onClick={() => setShowTimeViz(true)}>
           <div className="stat-icon">
             <FiClock />
           </div>
@@ -161,16 +163,6 @@ const Dashboard = () => {
             <h3>{stats.totalTimeSpent.hours}h {stats.totalTimeSpent.minutes}m</h3>
             <p>Total Time Spent</p>
             <span className="stat-subtext">This week: {stats.weeklyTimeSpent.hours}h {stats.weeklyTimeSpent.minutes}m</span>
-          </div>
-        </div>
-
-        <div className="stat-card stat-card-points">
-          <div className="stat-icon">
-            <FiAward />
-          </div>
-          <div className="stat-content">
-            <h3>{stats.points}</h3>
-            <p>Points Earned</p>
           </div>
         </div>
       </div>
@@ -252,6 +244,14 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+      )}
+
+      {showTimeViz && (
+        <TimeVisualization
+          weeklyTime={stats.weeklyTimeSpent}
+          totalTime={stats.totalTimeSpent}
+          onClose={() => setShowTimeViz(false)}
+        />
       )}
     </div>
   );

@@ -6,42 +6,47 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 /**
  * Generate personalized learning path based on assessment results
  */
-const generateLearningPath = async (assessmentResults, subjects) => {
+const generateLearningPath = async (assessmentResults, subjects, completedCourses = []) => {
   try {
     // Format assessment results for Gemini
     const resultsSummary = Object.entries(assessmentResults).map(([subject, data]) => {
       return `${subject}: Score ${data.score}% (${data.level} level)`;
     }).join('\n');
 
-    const prompt = `You are an expert educational advisor. Based on the following skill assessment results, generate a personalized learning path.
+    const completedSummary = (completedCourses && completedCourses.length > 0)
+      ? completedCourses.map(c => `- ${c}`).join('\n')
+      : 'None';
+
+    const prompt = `You are an expert educational advisor. Based on the following skill assessment results and any previously completed courses or assessments, generate a personalized learning path.
 
 Assessment Results:
 ${resultsSummary}
 
 Subjects Assessed: ${subjects.join(', ')}
 
-Please generate a comprehensive, structured learning path with the following requirements:
+Previously Completed Courses / Assessments (if any):
+${completedSummary}
 
-1. Create 8-12 topics that build upon each other logically
-2. Each topic should have:
-   - A clear, descriptive title
-   - A brief description (1-2 sentences)
-   - Difficulty level (Beginner, Intermediate, or Advanced)
-   - Estimated hours to complete
-   - 2-3 learning resources (Articles, Videos, Courses, Documentation, or Practice exercises)
-   - Prerequisites (which topics must be completed first)
-   - A logical order number
+Weighting and generation instructions (follow exactly):
 
-3. Topics should address knowledge gaps identified in the assessments
-4. Start with foundational concepts and progress to advanced topics
-5. Include practical, hands-on learning opportunities
+1) Compute a knowledge gap for each subject as (100 - score). Prioritize subjects by descending knowledge gap (largest deficit first) so topics primarily address the weakest areas.
+
+2) Allocate most topics (approximately 60%) to close the highest-priority knowledge gaps, allocate ~30% to reinforce intermediate areas, and reserve ~10% for advanced/enrichment topics that build on areas where the user scored strongly (score >= 85).
+
+3) If the completedCourses list contains entries, do NOT repeat the same course resources; instead recommend advanced or adjacent topics that build on those completed items.
+
+4) If multiple assessments exist for the same subject, treat the most recent score as the authoritative indicator of current ability.
+
+5) Provide 8-12 topics that build logically. For each topic, ensure it addresses one or more of the assessment-identified gaps and list the specific subject(s) or assessment(s) it targets in the description.
+
+6) Keep output strictly as a JSON array of topics with the exact schema below (no extra text, no markdown, no code blocks). The original schema must be followed so it can be parsed programmatically.
 
 Return the response as a JSON array of topics with this exact structure:
 [
   {
     "id": "topic-1",
     "title": "Topic Title",
-    "description": "Brief description",
+    "description": "Brief description (include which assessment(s)/subject(s) this topic addresses)",
     "difficulty": "Beginner|Intermediate|Advanced",
     "estimatedHours": 5,
     "resources": [
@@ -68,10 +73,10 @@ IMPORTANT: Only return the JSON array, no additional text, no markdown formattin
 
     // Clean up the response - remove markdown code blocks if present
     content = content.trim();
-    
+
     // Remove markdown code blocks
     content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
     // Remove any leading/trailing text before/after JSON
     const jsonMatch = content.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
@@ -80,11 +85,11 @@ IMPORTANT: Only return the JSON array, no additional text, no markdown formattin
 
     // Parse JSON
     const topics = JSON.parse(content);
-    
+
     return topics;
   } catch (error) {
     console.error('Gemini API Error:', error);
-    
+
     // Fallback to default learning path if Gemini API fails
     return generateFallbackLearningPath(assessmentResults, subjects);
   }
@@ -101,7 +106,7 @@ const generateFallbackLearningPath = (assessmentResults, subjects) => {
   subjects.forEach((subject, index) => {
     const result = assessmentResults[subject];
     const level = result?.level || 'Beginner';
-    
+
     if (subject === 'JavaScript') {
       topics.push(
         {

@@ -13,11 +13,12 @@ const useTimeTracker = () => {
     // Track time every 30 seconds
     intervalRef.current = setInterval(async () => {
       const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
-      
+
       if (timeSpent >= 30) {
         try {
           await api.post('/activity/track-time', {
             seconds: timeSpent,
+            timestamp: new Date().toISOString(),
           });
           startTimeRef.current = Date.now();
         } catch (error) {
@@ -33,6 +34,7 @@ const useTimeTracker = () => {
         try {
           await api.post('/activity/track-time', {
             seconds: timeSpent,
+            timestamp: new Date().toISOString(),
           });
         } catch (error) {
           console.error('Error tracking time on unload:', error);
@@ -47,12 +49,13 @@ const useTimeTracker = () => {
         clearInterval(intervalRef.current);
       }
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      
+
       // Final time tracking on cleanup
       const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
       if (timeSpent > 0 && isAuthenticated) {
         api.post('/activity/track-time', {
           seconds: timeSpent,
+          timestamp: new Date().toISOString(),
         }).catch(console.error);
       }
     };

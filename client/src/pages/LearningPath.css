@@ -5,6 +5,12 @@
   position: relative;
 }
 
+:root {
+  --primary-500: #ff7043;
+  --primary-600: #f97316;
+  --accent-600: #a6361b;
+}
+
 .time-watched-badge {
   position: fixed;
   top: 80px;
@@ -83,7 +89,7 @@
 
 .header-icon-wrapper {
   padding: 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(255, 112, 67, 0.08) 0%, rgba(249, 115, 22, 0.06) 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -92,7 +98,7 @@
 
 .header-icon {
   font-size: 2.5rem;
-  color: #667eea;
+  color: var(--primary-600);
 }
 
 .learning-path-header h1 {
@@ -145,12 +151,12 @@
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
   transition: width 0.3s;
 }
 
 .progress-percentage {
-  color: #667eea;
+  color: var(--primary-600);
   font-weight: 600;
   font-size: 1.1rem;
   min-width: 50px;
